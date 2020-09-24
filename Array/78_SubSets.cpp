@@ -20,8 +20,8 @@ class Solution {
  public:
   vector<vector<int>> subsets(vector<int> &nums) {
     vector<vector<int>> ans;
-    ans.push_back({});
-    dfsSearch({}, ans, nums, 0);
+    vector<int> current;
+    dfsSearch(current, ans, nums, -1);
     return ans;
   }
 
@@ -41,17 +41,13 @@ class Solution {
     return ans;
   }
 
-  void dfsSearch(vector<int> current, vector<vector<int>> &sums,
+  void dfsSearch(vector<int> &current, vector<vector<int>> &sums,
                  vector<int> &nums, int startIndex) {
-    cout << startIndex << endl;
-    if (startIndex >= nums.size()) {
-      return;
-    }
     sums.push_back(current);
-    for (int i = startIndex + 1; i < nums.size(); i++) {
+    startIndex++;
+    for (int i = startIndex; i < nums.size(); i++) {
       current.push_back(nums[i]);
       dfsSearch(current, sums, nums, i);
-      cout << i << endl;
       current.pop_back();
     }
   }
