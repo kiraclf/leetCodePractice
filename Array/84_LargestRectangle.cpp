@@ -2,6 +2,7 @@
 // the width of each bar is 1 find the area of largest rectangle in the
 // histogram.
 #include <iostream>
+#include <stack>
 #include <vector>
 
 using namespace std;
@@ -13,19 +14,25 @@ using namespace std;
 class Solution {
  public:
   int alargestRectangleArea(vector<int>& heights) {
+    // 异常处理
+    if (heights.size() == 0) return 0;
+    if (heights.size() == 1) return heights[0];
     int size = 0;
-    for (int i = 0; i < heights.size(); i++) {
-      int left = i - 1;
-      while (left >= 0 && heights[left] == heights[i]) {
-        left--;
+    // stack
+    // 插入哨兵对象
+    vector<int> copyH = heights;
+    copyH.insert(copyH.begin(), 0);
+    copyH.push_back(0);
+    stack<int> stack;
+    stack.push(0);
+    for (int i = 1; i < copyH.size(); i++) {
+      while (copyH[i] < copyH[stack.top()]) {
+        int height = copyH[stack.top()];
+        stack.pop();
+        int width = i - stack.top() - 1;
+        size = max(size, height * width);
       }
-      int right = i + 1;
-      while (right < heights.size() && heights[right] == heights[i]) {
-        right++;
-      }
-      int currentSize = heights[i] * (right - left + 1);
-      cout << currentSize << "\n" << endl;
-      size = max(size, currentSize);
+      stack.push(i);
     }
     return size;
   }
@@ -52,11 +59,3 @@ class Solution {
     return size;
   }
 };
-
-int main() {
-  vector<int> toTest = {2, 1, 5, 6, 2, 3};
-  Solution solve;
-  int max = solve.largestRectangleArea(toTest);
-  cout << "Area: " << max << endl;
-  return 0;
-}
