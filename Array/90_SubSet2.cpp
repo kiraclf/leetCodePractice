@@ -30,15 +30,38 @@ class Solution {
     return ans;
   }
 
-  void dfsDup(vector<vector<int>>& ans, vector<int>& current, vector<int>& nums, int currentIndex) {
-      ans.push_back(current);
-      for (int i = currentIndex; i < nums.size(); i++) {
-          if ( i > currentIndex && nums[i] == nums[i -1]) {
-              continue;
-          }
-          current.push_back(nums[i]);
-          dfsDup(ans,current, nums, i);
-          current.pop_back();
+  void dfsDup(vector<vector<int>>& ans, vector<int>& current, vector<int>& nums,
+              int currentIndex) {
+    ans.push_back(current);
+    for (int i = currentIndex; i < nums.size(); i++) {
+      if (i > currentIndex && nums[i] == nums[i - 1]) {
+        continue;
       }
+      current.push_back(nums[i]);
+      dfsDup(ans, current, nums, i);
+      current.pop_back();
+    }
+  }
+
+  // DFS 进行搜索
+  vector<vector<int>> dfsSolution(vector<int>& nums) {
+    vector<vector<int>> ans;
+    vector<int> current;
+    sort(nums.begin(), nums.end());
+    myDfs(current, ans, 0, nums);
+    return ans;
+  }
+
+  void myDfs(vector<int>& current, vector<vector<int>>& ans, int currentIndex,
+             vector<int>& nums) {
+    ans.push_back(current);
+    for (int i = currentIndex; i < nums.size(); i++) {
+      if (i > currentIndex && nums[i] == nums[i - 1]) {
+        continue;
+      }
+      current.push_back(nums[i]);
+      myDfs(current, ans, i + 1, nums);
+      current.pop_back();
+    }
   }
 };
